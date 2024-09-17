@@ -1,13 +1,10 @@
 using System;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Gun : MonoBehaviour
-{    
-    public static readonly int FIRE_HASH = Animator.StringToHash("Fire");
-
+{
     public static Action OnShoot;
-
-    public Transform BulletSpawnPoint => _bulletSpawnPoint;
 
     [SerializeField] private Transform _bulletSpawnPoint;
     [SerializeField] private Bullet _bulletPrefab;
@@ -15,15 +12,24 @@ public class Gun : MonoBehaviour
 
     private Vector2 _mousePos;
     private float _lastFireTime = 0f;
+    private int _startPoolSize = 20;
+    private int _maxPoolSize = 40;
 
     private bool _isGunOnCooldown => Time.time < _lastFireTime;
 
     private Animator _animator;
+    private ObjectPool<Bullet> _bulletPool;
 
+    private static readonly int FIRE_HASH = Animator.StringToHash("Fire");
 
     private void Awake() 
     {
         _animator = GetComponent<Animator>();    
+    }
+
+    private void Start() 
+    {
+        CreateBulletPool();    
     }
 
     private void Update()
@@ -46,6 +52,11 @@ public class Gun : MonoBehaviour
         OnShoot -= FireAnimation;
     }
 
+    public void ReleaseBulletFromPool(Bullet bullet)
+    {
+        _bulletPool.Release(bullet);
+    }
+
     private void Shoot()
     {
         if (Input.GetMouseButton(0) && !_isGunOnCooldown) {
@@ -56,8 +67,8 @@ public class Gun : MonoBehaviour
     private void ShootProjectile()
     {            
         ResetLastFireTime();
-        Bullet newBullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, Quaternion.identity);
-        newBullet.Init(_bulletSpawnPoint.position, _mousePos);
+        Bullet newBullet = _bulletPool.Get();
+        newBullet.Init(this, _bulletSpawnPoint.position, _mousePos);
     }
 
     private void RotateGun()
@@ -77,4 +88,19 @@ public class Gun : MonoBehaviour
     {
         _animator.Play(FIRE_HASH, 0, 0f);
     }
+
+    private void CreateBulletPool()
+    {
+        _bulletPool = new ObjectPool<Bullet>(CreateNewBullet, OnGetBullet, OnReleaseBullet, OnDestroyBullet, false, _startPoolSize, _maxPoolSize);
+    }
+
+    private Bullet CreateNewBullet() => Instantiate(_bulletPrefab);
+
+    private void OnGetBullet(Bullet bullet) => bullet.gameObject.SetActive(true);
+    
+    private void OnReleaseBullet(Bullet bullet) => bullet.gameObject.SetActive(false);
+
+    private void OnDestroyBullet(Bullet bullet) => Destroy(bullet);
+
+
 }
