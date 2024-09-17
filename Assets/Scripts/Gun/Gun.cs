@@ -2,7 +2,9 @@ using System;
 using UnityEngine;
 
 public class Gun : MonoBehaviour
-{
+{    
+    public static readonly int FIRE_HASH = Animator.StringToHash("Fire");
+
     public static Action OnShoot;
 
     public Transform BulletSpawnPoint => _bulletSpawnPoint;
@@ -13,8 +15,17 @@ public class Gun : MonoBehaviour
 
     private Vector2 _mousePos;
     private float _lastFireTime = 0f;
+
     private bool _isGunOnCooldown => Time.time < _lastFireTime;
-    
+
+    private Animator _animator;
+
+
+    private void Awake() 
+    {
+        _animator = GetComponent<Animator>();    
+    }
+
     private void Update()
     {
         Shoot();
@@ -25,12 +36,14 @@ public class Gun : MonoBehaviour
     {
         OnShoot += ShootProjectile;
         OnShoot += ResetLastFireTime;
+        OnShoot += FireAnimation;
     }
 
     private void OnDisable() 
     {
         OnShoot -= ShootProjectile;
         OnShoot -= ResetLastFireTime;
+        OnShoot -= FireAnimation;
     }
 
     private void Shoot()
@@ -60,5 +73,8 @@ public class Gun : MonoBehaviour
         _lastFireTime = Time.time + _gunFireCoolDown;
     }
 
-    
+    private void FireAnimation()
+    {
+        _animator.Play(FIRE_HASH, 0, 0f);
+    }
 }
