@@ -1,4 +1,5 @@
 using System;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -17,6 +18,7 @@ public class Gun : MonoBehaviour
 
     private bool _isGunOnCooldown => Time.time < _lastFireTime;
 
+    private CinemachineImpulseSource _impulseSource;
     private Animator _animator;
     private ObjectPool<Bullet> _bulletPool;
 
@@ -24,7 +26,8 @@ public class Gun : MonoBehaviour
 
     private void Awake() 
     {
-        _animator = GetComponent<Animator>();    
+        _animator = GetComponent<Animator>(); 
+        _impulseSource = GetComponent<CinemachineImpulseSource>();   
     }
 
     private void Start() 
@@ -43,6 +46,7 @@ public class Gun : MonoBehaviour
         OnShoot += ShootProjectile;
         OnShoot += ResetLastFireTime;
         OnShoot += FireAnimation;
+        OnShoot += GunScreenShake;
     }
 
     private void OnDisable() 
@@ -50,6 +54,7 @@ public class Gun : MonoBehaviour
         OnShoot -= ShootProjectile;
         OnShoot -= ResetLastFireTime;
         OnShoot -= FireAnimation;
+        OnShoot -= GunScreenShake;
     }
 
     public void ReleaseBulletFromPool(Bullet bullet)
@@ -102,5 +107,8 @@ public class Gun : MonoBehaviour
 
     private void OnDestroyBullet(Bullet bullet) => Destroy(bullet);
 
-
+    private void GunScreenShake()
+    {
+        _impulseSource.GenerateImpulse();
+    }
 }
