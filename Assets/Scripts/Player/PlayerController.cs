@@ -6,7 +6,6 @@ public class PlayerController : MonoBehaviour
 {
     public static PlayerController Instance;
 
-    [SerializeField] private float _moveSpeed = 5f;
     [SerializeField] private float _jumpStrength = 7f;
     [SerializeField] private Transform _feetTransform;
     [SerializeField] private Vector2 _groundCheck;
@@ -15,8 +14,7 @@ public class PlayerController : MonoBehaviour
     private PlayerInput _playerInput;
     private FrameInput _frameInput;
 
-    private Vector2 _movement;
-
+    private Movement _movement;
     private Rigidbody2D _rigidBody;
 
     public void Awake() {
@@ -24,17 +22,15 @@ public class PlayerController : MonoBehaviour
 
         _rigidBody = GetComponent<Rigidbody2D>();
         _playerInput = GetComponent<PlayerInput>();
+        _movement = GetComponent<Movement>();
     }
 
     private void Update()
     {
         GatherInput();
+        Movement();
         Jump();
         HandleSpriteFlip();
-    }
-
-    private void FixedUpdate() {
-        Move();
     }
 
     private void OnDrawGizmos() {
@@ -50,12 +46,11 @@ public class PlayerController : MonoBehaviour
     private void GatherInput()
     {
         _frameInput = _playerInput.FrameInput;
-        _movement = new Vector2(_frameInput.Move.x * _moveSpeed, _rigidBody.velocity.y);
     }
 
-    private void Move() {
-
-        _rigidBody.velocity = new Vector2(_movement.x, _rigidBody.velocity.y);
+    private void Movement() 
+    {
+        _movement.SetCurrentDIrection(_frameInput.Move.x);
     }
 
     private void Jump()
