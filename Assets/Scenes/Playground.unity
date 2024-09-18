@@ -7771,6 +7771,7 @@ MonoBehaviour:
   _jumpStrength: 12
   _extraGravity: 900
   _gravityDelay: 0.2
+  _coyoteTime: 0.1
   _feetTransform: {fileID: 147807568}
   _groundCheck: {x: 1.23, y: 0.15}
   _groundLayer:
