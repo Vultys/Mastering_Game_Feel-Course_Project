@@ -7,6 +7,8 @@ public class PlayerController : MonoBehaviour
     public static PlayerController Instance;
 
     [SerializeField] private float _jumpStrength = 7f;
+    [SerializeField] private float _extraGravity = 700f;
+    [SerializeField] private float _gravityDelay = 0.2f;
     [SerializeField] private Transform _feetTransform;
     [SerializeField] private Vector2 _groundCheck;
     [SerializeField] private LayerMask _groundLayer;
@@ -16,6 +18,8 @@ public class PlayerController : MonoBehaviour
 
     private Movement _movement;
     private Rigidbody2D _rigidBody;
+
+    private float _timeInAir;
 
     public void Awake() {
         if (Instance == null) { Instance = this; }
@@ -31,6 +35,12 @@ public class PlayerController : MonoBehaviour
         Movement();
         Jump();
         HandleSpriteFlip();
+        GravityDelay();
+    }
+
+    private void FixedUpdate() 
+    {
+        ExtraGravity();    
     }
 
     private void OnDrawGizmos() {
@@ -81,5 +91,25 @@ public class PlayerController : MonoBehaviour
     {
         Collider2D isGrounded = Physics2D.OverlapBox(_feetTransform.position, _groundCheck, 0f, _groundLayer);
         return isGrounded;
+    }
+
+    private void GravityDelay()
+    {
+        if(!CheckGrounded())
+        {
+            _timeInAir += Time.deltaTime;
+        }
+        else
+        {
+            _timeInAir = 0f;
+        }
+    }
+
+    private void ExtraGravity()
+    {
+        if(_timeInAir > _gravityDelay)
+        {
+            _rigidBody.AddForce(new Vector2(0f, -_extraGravity * Time.deltaTime));
+        }
     }
 }
