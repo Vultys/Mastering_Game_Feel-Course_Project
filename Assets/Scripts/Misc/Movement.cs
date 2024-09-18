@@ -20,7 +20,7 @@ public class Movement : MonoBehaviour
         Move();
     }
 
-    public void SetCurrentDIrection(float currentDirection)
+    public void SetCurrentDirection(float currentDirection)
     {   
         _moveX = currentDirection;
     }

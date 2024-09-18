@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _jumpForce = 7f;
     [SerializeField] private float _jumpInterval = 4f;
     [SerializeField] private float _changeDirectionInterval = 3f;
-    
+
     private Rigidbody2D _rigidBody;
     private Movement _movement;
 
@@ -26,7 +26,7 @@ public class Enemy : MonoBehaviour
         while (true)
         {
             float currentDirection = UnityEngine.Random.Range(0, 2) * 2 - 1; // 1 or -1
-            _movement.SetCurrentDIrection(currentDirection);
+            _movement.SetCurrentDirection(currentDirection);
             yield return new WaitForSeconds(_changeDirectionInterval);
         }
     }

@@ -1,9 +1,12 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static Action OnJump;
+
     public static PlayerController Instance;
 
     [SerializeField] private float _jumpStrength = 7f;
@@ -20,6 +23,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D _rigidBody;
 
     private float _timeInAir;
+    private bool _doubleJumpAvailable;
 
     public void Awake() {
         if (Instance == null) { Instance = this; }
@@ -29,11 +33,21 @@ public class PlayerController : MonoBehaviour
         _movement = GetComponent<Movement>();
     }
 
+    private void OnEnable() 
+    {
+        OnJump += ApplyJumpForce;
+    }
+
+    private void OnDisable() 
+    {
+        OnJump -= ApplyJumpForce;
+    }
+
     private void Update()
     {
         GatherInput();
         Movement();
-        Jump();
+        HandleJump();
         HandleSpriteFlip();
         GravityDelay();
     }
@@ -60,16 +74,22 @@ public class PlayerController : MonoBehaviour
 
     private void Movement() 
     {
-        _movement.SetCurrentDIrection(_frameInput.Move.x);
+        _movement.SetCurrentDirection(_frameInput.Move.x);
     }
 
-    private void Jump()
+    private void HandleJump()
     {
         if(!_frameInput.Jump) return;
 
-        if (CheckGrounded())
+        if(_doubleJumpAvailable)
         {
-            _rigidBody.AddForce(Vector2.up * _jumpStrength, ForceMode2D.Impulse);
+            _doubleJumpAvailable = false;
+            OnJump?.Invoke();
+        } 
+        else if (CheckGrounded())
+        {
+            _doubleJumpAvailable = true;
+            OnJump?.Invoke();
         }
     }
 
@@ -111,5 +131,12 @@ public class PlayerController : MonoBehaviour
         {
             _rigidBody.AddForce(new Vector2(0f, -_extraGravity * Time.deltaTime));
         }
+    }
+
+    private void ApplyJumpForce()
+    {
+        _rigidBody.velocity = Vector2.zero;
+        _timeInAir = 0f;
+        _rigidBody.AddForce(Vector2.up * _jumpStrength, ForceMode2D.Impulse);
     }
 }
