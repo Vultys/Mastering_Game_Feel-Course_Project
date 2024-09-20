@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 8637927956967273374}
   - component: {fileID: -8421473015585181171}
   - component: {fileID: 5962481647615855230}
+  - component: {fileID: 2119037083868479899}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -196,6 +197,23 @@ MonoBehaviour:
   _defaultMaterial: {fileID: 2100000, guid: a8eb02c037589fc43903014c3ac6641a, type: 2}
   _whiteFlashMaterial: {fileID: 2100000, guid: 7c9f44f7d91ea1341bffd4225c138768, type: 2}
   _flashTime: 0.1
+--- !u!114 &2119037083868479899
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500829499347730933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e919aff6f34235446acc35bc674f6164, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _fillSpriteRenderer: {fileID: 7564454557696005338}
+  _colors:
+  - {r: 0, g: 0.092921734, b: 1, a: 1}
+  - {r: 0.04907012, g: 1, b: 0, a: 1}
+  - {r: 0.9827944, g: 1, b: 0, a: 1}
 --- !u!1 &5153281642299242202
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,6 +224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5406967454622742902}
   - component: {fileID: 7564454557696005338}
+  - component: {fileID: 4306656236012577455}
   m_Layer: 0
   m_Name: Fill
   m_TagString: Untagged
@@ -270,7 +289,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 1899769647, guid: 01b49b46e6384a6419be35fbdd9b5c1a, type: 3}
-  m_Color: {r: 1, g: 0.6392157, b: 0.6392157, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -280,6 +299,20 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4306656236012577455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5153281642299242202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e919aff6f34235446acc35bc674f6164, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _fillSpriteRenderer: {fileID: 0}
+  _colors: []
 --- !u!1 &5880985211343117395
 GameObject:
   m_ObjectHideFlags: 0

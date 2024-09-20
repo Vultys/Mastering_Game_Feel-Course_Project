@@ -9,12 +9,14 @@ public class Flash : MonoBehaviour
     [SerializeField] private float _flashTime = 0.1f;
 
     private SpriteRenderer[] _spriteRenderers;
+    private ColorChanger _colorChanger;
 
     private Color[] _previousColors = new Color[2];
 
     private void Awake() 
     {
         _spriteRenderers = GetComponentsInChildren<SpriteRenderer>();    
+        _colorChanger = GetComponent<ColorChanger>();
     }
 
     public void StartFlash()
@@ -24,11 +26,11 @@ public class Flash : MonoBehaviour
 
     private IEnumerator FlashRoutine()
     {
-        for(int i = 0; i <= _spriteRenderers.Length - 1; i++)
+        foreach(SpriteRenderer sr in _spriteRenderers)
         {
-            _spriteRenderers[i].material = _whiteFlashMaterial;
-            _previousColors[i] = _spriteRenderers[i].color;
-            _spriteRenderers[i].color = Color.white;
+            sr.material = _whiteFlashMaterial;
+
+            if(_colorChanger) { _colorChanger.SetColor(Color.white); }
         }
 
         yield return new WaitForSeconds(_flashTime);
@@ -38,10 +40,11 @@ public class Flash : MonoBehaviour
 
     private void SetDefaultMaterial()
     {
-        for(int i = 0; i <= _spriteRenderers.Length - 1; i++)
+        foreach(SpriteRenderer sr in _spriteRenderers)
         {
-            _spriteRenderers[i].material = _defaultMaterial;
-            _spriteRenderers[i].color = _previousColors[i];
+            sr.material = _defaultMaterial;
+
+            if(_colorChanger) { _colorChanger.SetColor(_colorChanger.DefaultColor); }
         }
     }
 }
