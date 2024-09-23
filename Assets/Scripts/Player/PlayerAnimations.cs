@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class PlayerAnimations : MonoBehaviour
@@ -18,6 +19,20 @@ public class PlayerAnimations : MonoBehaviour
 
     [SerializeField] private float _cowboyHatTiltModifier = 2f;
 
+    [SerializeField] private float _yLandVelocityCheck = -20f;
+
+    private Vector2 _velocityBeforePhysicsUpdate;
+
+    private Rigidbody2D _rigidbody;
+
+    private CinemachineImpulseSource _impulseSource;
+
+    private void Awake() 
+    {
+        _rigidbody = GetComponent<Rigidbody2D>();
+        _impulseSource = GetComponent<CinemachineImpulseSource>();
+    }
+
     private void OnEnable() 
     {
         PlayerController.OnJump += PlayJumpParticles;   
@@ -32,6 +47,20 @@ public class PlayerAnimations : MonoBehaviour
     {
         DetectMoveDust();
         ApplyTilt();
+    }
+
+    private void FixedUpdate() 
+    {
+        _velocityBeforePhysicsUpdate = _rigidbody.velocity;
+    }
+
+    private void OnCollisionEnter2D(Collision2D other) 
+    {
+        if(_velocityBeforePhysicsUpdate.y < _yLandVelocityCheck)
+        {
+            PlayJumpParticles();
+            _impulseSource.GenerateImpulse();
+        }    
     }
 
     private void DetectMoveDust()
