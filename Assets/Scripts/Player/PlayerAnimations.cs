@@ -8,9 +8,13 @@ public class PlayerAnimations : MonoBehaviour
 
     [SerializeField] private Transform _characterSpriteTransform;
 
+    [SerializeField] private Transform _cowboyHatSpriteTransform;
+
     [SerializeField] private float _tiltAngle = 20f;
 
     [SerializeField] private float _tiltSpeed = 5f;
+
+    [SerializeField] private float _cowboyHatTiltModifier = 2f;
 
     private void Update() 
     {
@@ -57,5 +61,10 @@ public class PlayerAnimations : MonoBehaviour
         Quaternion targetCharacterRotation = Quaternion.Euler(currentCharacterRotation.eulerAngles.x, currentCharacterRotation.eulerAngles.y, targetAngle);
 
         _characterSpriteTransform.rotation = Quaternion.Lerp(currentCharacterRotation, targetCharacterRotation, _tiltSpeed * Time.deltaTime);
+        
+        Quaternion currentHatRotation = _cowboyHatSpriteTransform.rotation;
+        Quaternion targetHatRotation = Quaternion.Euler(currentHatRotation.eulerAngles.x, currentHatRotation.eulerAngles.y, -targetAngle / _cowboyHatTiltModifier);
+
+        _cowboyHatSpriteTransform.rotation = Quaternion.Lerp(currentHatRotation, targetHatRotation, _cowboyHatTiltModifier * _tiltSpeed * Time.deltaTime);
     }
 }
