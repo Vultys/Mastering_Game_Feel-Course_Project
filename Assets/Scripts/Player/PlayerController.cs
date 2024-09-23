@@ -70,6 +70,12 @@ public class PlayerController : MonoBehaviour
         return transform.eulerAngles.y == 0;
     }
 
+    public bool CheckGrounded()
+    {
+        Collider2D isGrounded = Physics2D.OverlapBox(_feetTransform.position, _groundCheck, 0f, _groundLayer);
+        return isGrounded;
+    }
+
     private void GatherInput()
     {
         _frameInput = _playerInput.FrameInput;
@@ -111,12 +117,6 @@ public class PlayerController : MonoBehaviour
         {
             transform.eulerAngles = new Vector3(0f, 0f, 0f);
         }
-    }
-
-    private bool CheckGrounded()
-    {
-        Collider2D isGrounded = Physics2D.OverlapBox(_feetTransform.position, _groundCheck, 0f, _groundLayer);
-        return isGrounded;
     }
 
     private void GravityDelay()
