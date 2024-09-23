@@ -6,6 +6,8 @@ public class PlayerAnimations : MonoBehaviour
 {
     [SerializeField] private ParticleSystem _moveDustVFX;
 
+    [SerializeField] private ParticleSystem _jumpDustVFX;
+
     [SerializeField] private Transform _characterSpriteTransform;
 
     [SerializeField] private Transform _cowboyHatSpriteTransform;
@@ -15,6 +17,16 @@ public class PlayerAnimations : MonoBehaviour
     [SerializeField] private float _tiltSpeed = 5f;
 
     [SerializeField] private float _cowboyHatTiltModifier = 2f;
+
+    private void OnEnable() 
+    {
+        PlayerController.OnJump += PlayJumpParticles;   
+    }
+
+    private void OnDisable() 
+    {
+        PlayerController.OnJump -= PlayJumpParticles;    
+    }
 
     private void Update() 
     {
@@ -66,5 +78,10 @@ public class PlayerAnimations : MonoBehaviour
         Quaternion targetHatRotation = Quaternion.Euler(currentHatRotation.eulerAngles.x, currentHatRotation.eulerAngles.y, -targetAngle / _cowboyHatTiltModifier);
 
         _cowboyHatSpriteTransform.rotation = Quaternion.Lerp(currentHatRotation, targetHatRotation, _cowboyHatTiltModifier * _tiltSpeed * Time.deltaTime);
+    }
+
+    private void PlayJumpParticles()
+    {
+        _jumpDustVFX.Play();
     }
 }
