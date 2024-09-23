@@ -49,6 +49,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _moveSpeed: 30
   _damageAmount: 1
+  _knockbackThrust: 10
+  _bulletVFX: {fileID: 8243307557972032819, guid: a94ddbe6d73610141ba0e497c65b1970, type: 3}
 --- !u!212 &3373200371414082845
 SpriteRenderer:
   m_ObjectHideFlags: 0
