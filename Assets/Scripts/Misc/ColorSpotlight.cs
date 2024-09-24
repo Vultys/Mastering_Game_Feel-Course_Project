@@ -7,6 +7,7 @@ public class ColorSpotlight : MonoBehaviour
     [SerializeField] private GameObject _spotlightHead;
 
     [SerializeField] private float _rotationSpeed = 20f;
+    [SerializeField] private float _discoRotationSpeed = 120f;
 
     [SerializeField] private float _maxRotation = 45f;
 
@@ -19,8 +20,15 @@ public class ColorSpotlight : MonoBehaviour
 
     private void Update() 
     {
-        
         RotateHead();    
+    }
+
+    public IEnumerator SpotLightDiscoParty(float discoPartyTime)
+    {
+        float defaultRotationSpeed = _rotationSpeed;
+        _rotationSpeed = _discoRotationSpeed;
+        yield return new WaitForSeconds(discoPartyTime);
+        _rotationSpeed = defaultRotationSpeed;
     }
 
     private void RotateHead()
