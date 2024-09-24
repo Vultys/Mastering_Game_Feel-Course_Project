@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -9,7 +10,9 @@ public class Gun : MonoBehaviour
 
     [SerializeField] private Transform _bulletSpawnPoint;
     [SerializeField] private Bullet _bulletPrefab;
+    [SerializeField] private GameObject _muzzleFlash;
     [SerializeField] private float _gunFireCoolDown = 0.5f;
+    [SerializeField] private float _muzzleFlashTime = 0.05f;
 
     private Vector2 _mousePos;
     private float _lastFireTime = 0f;
@@ -18,6 +21,7 @@ public class Gun : MonoBehaviour
 
     private bool _isGunOnCooldown => Time.time < _lastFireTime;
 
+    private Coroutine _muzzleFlashRoutine;
     private CinemachineImpulseSource _impulseSource;
     private Animator _animator;
     private ObjectPool<Bullet> _bulletPool;
@@ -47,6 +51,7 @@ public class Gun : MonoBehaviour
         OnShoot += ResetLastFireTime;
         OnShoot += FireAnimation;
         OnShoot += GunScreenShake;
+        OnShoot += MuzzleFlash;
     }
 
     private void OnDisable() 
@@ -55,6 +60,7 @@ public class Gun : MonoBehaviour
         OnShoot -= ResetLastFireTime;
         OnShoot -= FireAnimation;
         OnShoot -= GunScreenShake;
+        OnShoot -= MuzzleFlash;
     }
 
     public void ReleaseBulletFromPool(Bullet bullet)
@@ -110,5 +116,22 @@ public class Gun : MonoBehaviour
     private void GunScreenShake()
     {
         _impulseSource.GenerateImpulse();
+    }
+
+    private void MuzzleFlash()
+    {
+        if(_muzzleFlashRoutine != null)
+        {
+            StopCoroutine(_muzzleFlashRoutine);
+        }
+
+        _muzzleFlashRoutine = StartCoroutine(MuzzleFlashRoutine());
+    }
+
+    private IEnumerator MuzzleFlashRoutine()
+    {        
+        _muzzleFlash.SetActive(true);
+        yield return new WaitForSeconds(_muzzleFlashTime);
+        _muzzleFlash.SetActive(false);
     }
 }
