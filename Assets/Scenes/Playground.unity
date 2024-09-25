@@ -553,8 +553,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3760132e95f345d44a82a09250ae84a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gunShoot: {fileID: 11400000, guid: 55187ff76ad14d34092aff41334b0188, type: 2}
-  _jump: {fileID: 11400000, guid: 6c69de1912522174a93fe3daa89ff8f5, type: 2}
+  _masterVolume: 1
+  _soundCollectionSO: {fileID: 11400000, guid: 433b58a9ccfd4a348a93dee26b94e92d, type: 2}
 --- !u!1 &368071889
 GameObject:
   m_ObjectHideFlags: 0

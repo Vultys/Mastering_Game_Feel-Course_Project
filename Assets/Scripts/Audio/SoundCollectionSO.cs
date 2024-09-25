@@ -1,0 +1,10 @@
+using UnityEngine;
+
+[CreateAssetMenu(fileName = "SoundCollectionSO", menuName = "SoundCollectionSO", order = 0)]
+public class SoundCollectionSO : ScriptableObject 
+{
+    public SoundSO[] GunShoot;
+    public SoundSO[] Jump;
+    public SoundSO[] Splat;
+
+}
