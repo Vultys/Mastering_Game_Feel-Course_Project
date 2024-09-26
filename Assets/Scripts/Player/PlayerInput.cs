@@ -9,9 +9,7 @@ public class PlayerInput : MonoBehaviour
 
     private PlayerInputActions _playerInputActions;
 
-    private InputAction _move;
-
-    private InputAction _jump;
+    private InputAction _move, _jump, _jetpack;
 
     private void Awake() 
     {
@@ -19,6 +17,7 @@ public class PlayerInput : MonoBehaviour
 
         _move = _playerInputActions.Player.Move;
         _jump = _playerInputActions.Player.Jump;
+        _jetpack = _playerInputActions.Player.Jetpack;
     }
 
     private void OnEnable() 
@@ -40,7 +39,8 @@ public class PlayerInput : MonoBehaviour
     {
         return new FrameInput {
             Move = _move.ReadValue<Vector2>(),
-            Jump = _jump.WasPressedThisFrame()
+            Jump = _jump.WasPressedThisFrame(),
+            Jetpack = _jetpack.WasPressedThisFrame()
         };
     }
 }
@@ -49,4 +49,5 @@ public struct FrameInput
 {
     public Vector2 Move;
     public bool Jump;
+    public bool Jetpack;
 }
