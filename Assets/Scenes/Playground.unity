@@ -12722,8 +12722,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bulletSpawnPoint: {fileID: 710606986}
   _bulletPrefab: {fileID: -5611149099131491127, guid: 9dca18bc1fee05d488922a753a58ca8d, type: 3}
+  _grenadePrefab: {fileID: 6962295585456195910, guid: 3613665c6f3ef9344946cdcb56ac418e, type: 3}
   _muzzleFlash: {fileID: 2051448848}
   _gunFireCoolDown: 0.2
+  _grenadeFireCoolDown: 1
   _muzzleFlashTime: 0.02
 --- !u!95 &1414218016
 Animator:

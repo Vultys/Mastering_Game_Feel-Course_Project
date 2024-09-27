@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aa37aad1ed866e343b0b76ba198b64b7, type: 3}
-  m_Name: Jetpack
+  m_Name: Grenade Shoot
   m_EditorClassIdentifier: 
   AudioType: 0
-  Clip: {fileID: 8300000, guid: 05cef8233c5297d4a9cf67dd3035d89c, type: 3}
+  Clip: {fileID: 8300000, guid: c518beea58e43ba48a6ffe398ad4e55b, type: 3}
   Loop: 0
   RandomizePitch: 0
-  RandomPitchRangeModifier: 0.1
-  Volume: 4
-  Pitch: 1
+  RandomPitchRangeModifier: 0.13
+  Volume: 1.5
+  Pitch: 0.8
