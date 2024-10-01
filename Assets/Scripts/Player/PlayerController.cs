@@ -72,6 +72,12 @@ public class PlayerController : MonoBehaviour
         ExtraGravity();    
     }
 
+    private void OnDestroy() 
+    {
+        Fade fade = FindFirstObjectByType<Fade>();
+        fade?.FadeInAndOut();
+    }
+
     private void OnDrawGizmos() {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(_feetTransform.position, _groundCheck);

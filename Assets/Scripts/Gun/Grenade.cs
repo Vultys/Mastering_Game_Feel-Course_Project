@@ -11,7 +11,6 @@ public class Grenade : MonoBehaviour
 
     [SerializeField] private float _launchForce = 15f;
     [SerializeField] private int _damageAmount = 3;
-    [SerializeField] private float _knockbackThrust = 10f;
     [SerializeField] private float _torqueAmount = 0.2f;
     [SerializeField] private float _timeBeforeDetonation = 3f;
     [SerializeField] private float _explosionRadius = 1.5f;

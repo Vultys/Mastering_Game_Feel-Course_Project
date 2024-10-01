@@ -12,6 +12,8 @@ public class Movement : MonoBehaviour
     private Rigidbody2D _rigidBody;
     private Knockback _knockback;
 
+    public bool CanMove => _canMove;
+
     private void Awake() 
     {
         _rigidBody = GetComponent<Rigidbody2D>();

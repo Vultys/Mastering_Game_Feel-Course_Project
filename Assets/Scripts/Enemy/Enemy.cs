@@ -1,27 +1,26 @@
 using System.Collections;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour, IDamageable
+public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _jumpForce = 7f;
     [SerializeField] private float _jumpInterval = 4f;
     [SerializeField] private float _changeDirectionInterval = 3f;
+    [SerializeField] private float _knockbackThrust = 25f;
+    [SerializeField] private int _damageAmount = 1;
+
 
     private Rigidbody2D _rigidBody;
+
     private Movement _movement;
+
     private ColorChanger _colorChanger;
-    private Knockback _knockback;
-    private Flash _flash;
-    private Health _health;
 
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
         _movement = GetComponent<Movement>();
         _colorChanger = GetComponent<ColorChanger>();
-        _knockback = GetComponent<Knockback>();
-        _flash = GetComponent<Flash>();
-        _health = GetComponent<Health>();
     }
 
     private void Start() {
@@ -29,15 +28,27 @@ public class Enemy : MonoBehaviour, IDamageable
         StartCoroutine(RandomJumpRoutine());
     }
 
+    private void OnCollisionEnter2D(Collision2D other) 
+    {
+        PlayerController player = other.gameObject.GetComponent<PlayerController>();
+
+        if(!player) return;
+        
+        Movement playerMovement = player.GetComponent<Movement>();
+        if(!playerMovement.CanMove) return;
+
+        IHitable iHitable = player.GetComponent<IHitable>();
+        iHitable?.TakeHit();
+
+        IDamageable iDamageable = player.GetComponent<IDamageable>();
+        iDamageable?.TakeDamage(transform.position, _damageAmount, _knockbackThrust);
+
+        AudioManager.Instance.Enemy_OnPlayerHit();
+    }
+
     public void Init(Color color)
     {
         _colorChanger.SetDefaultColor(color);
-    }
-
-    public void TakeDamage(int damageAmount, float knockbackThrust)
-    {
-        _health.TakeDamage(damageAmount);
-        _knockback.GetKnockedBack(PlayerController.Instance.transform.position, knockbackThrust);
     }
 
     private IEnumerator ChangeDirectionRoutine()
@@ -59,10 +70,5 @@ public class Enemy : MonoBehaviour, IDamageable
             Vector2 jumpDirection = new Vector2(randomDirection, 1f).normalized;
             _rigidBody.AddForce(jumpDirection * _jumpForce, ForceMode2D.Impulse);
         }
-    }
-
-    public void TakeHit()
-    {
-        _flash.StartFlash();
     }
 }
