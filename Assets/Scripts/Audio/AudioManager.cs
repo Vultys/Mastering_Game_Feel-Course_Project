@@ -222,10 +222,7 @@ public class AudioManager : MonoBehaviour
             _deathList.Add(health);
         }
 
-        if(_deathRoutine == null)
-        {
-            _deathRoutine = StartCoroutine(DeathWindowRoutine());
-        }
+        _deathRoutine ??= StartCoroutine(DeathWindowRoutine());
     }
 
     private IEnumerator DeathWindowRoutine()

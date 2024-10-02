@@ -18,7 +18,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float _gravityDelay = 0.2f;
     [SerializeField] private float _coyoteTime = 0.5f;
     [SerializeField] private float _jetpackTime = 0.6f;
-    [SerializeField] private float _jetpackStrength = 11f; 
+    [SerializeField] private float _jetpackStrength = 11f;
+    [SerializeField] private float _maxFallSpeedVelocity = 25f;
     [SerializeField] private Transform _feetTransform;
     [SerializeField] private Vector2 _groundCheck;
     [SerializeField] private LayerMask _groundLayer;
@@ -154,6 +155,11 @@ public class PlayerController : MonoBehaviour
         if(_timeInAir > _gravityDelay)
         {
             _rigidBody.AddForce(new Vector2(0f, -_extraGravity * Time.deltaTime));
+
+            if(_rigidBody.velocity.y > _maxFallSpeedVelocity)
+            {
+                _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, _maxFallSpeedVelocity);
+            }
         }
     }
 
