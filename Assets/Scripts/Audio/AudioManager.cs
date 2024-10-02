@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -29,7 +31,7 @@ public class AudioManager : MonoBehaviour
     {
         Gun.OnShoot += Gun_OnShoot;
         PlayerController.OnJump += PlayerController_OnJump;
-        Health.OnDeath += Health_OnDeath;
+        Health.OnDeath += HandleDeath;
         DiscoBallManager.OnDiscoBallHitEvent += DiscoBallMusic;
         PlayerController.OnJetpack += PlayerController_OnJetpack;
         Gun.OnGrenadeLaunch += Gun_OnGrenadeLaunch;
@@ -39,7 +41,7 @@ public class AudioManager : MonoBehaviour
     {
         Gun.OnShoot -= Gun_OnShoot;
         PlayerController.OnJump -= PlayerController_OnJump;
-        Health.OnDeath -= Health_OnDeath;
+        Health.OnDeath -= HandleDeath;
         DiscoBallManager.OnDiscoBallHitEvent -= DiscoBallMusic;
         PlayerController.OnJetpack -= PlayerController_OnJetpack;
         Gun.OnGrenadeLaunch -= Gun_OnGrenadeLaunch;
@@ -151,6 +153,11 @@ public class AudioManager : MonoBehaviour
     {
         PlayRandomSound(_soundCollectionSO.Splat);
     }
+    
+    private void Health_OnDeath()
+    {
+        PlayRandomSound(_soundCollectionSO.Splat);
+    }
 
     private void PlayerController_OnJetpack()
     {
@@ -177,6 +184,11 @@ public class AudioManager : MonoBehaviour
         PlayRandomSound(_soundCollectionSO.PlayerHit);
     }
 
+    private void AudioManager_MegaKill()
+    {
+        PlayRandomSound(_soundCollectionSO.MegaKill);
+    }
+
     #endregion
     
     #region Music
@@ -191,6 +203,45 @@ public class AudioManager : MonoBehaviour
         PlayRandomSound(_soundCollectionSO.DiscoBallMusic);
         float soundLength = _soundCollectionSO.DiscoBallMusic[0].Clip.length;
         Utils.RunAfterDelay(this, soundLength, FightMusic);
+    }
+
+    #endregion
+
+    #region Custom SFX Logic
+
+    private List<Health> _deathList = new List<Health>();
+
+    private Coroutine _deathRoutine;
+
+    private void HandleDeath(Health health)
+    {
+        bool isEnemy = health.GetComponent<Enemy>();
+
+        if(isEnemy)
+        {
+            _deathList.Add(health);
+        }
+
+        if(_deathRoutine == null)
+        {
+            _deathRoutine = StartCoroutine(DeathWindowRoutine());
+        }
+    }
+
+    private IEnumerator DeathWindowRoutine()
+    {
+        yield return null;
+        int megaKillAmount = 3;
+
+        if(_deathList.Count >= megaKillAmount)
+        {
+            AudioManager_MegaKill();
+        }
+
+        Health_OnDeath();
+
+        _deathList.Clear();
+        _deathRoutine = null;
     }
 
     #endregion
